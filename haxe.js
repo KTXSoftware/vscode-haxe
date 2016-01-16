@@ -97,7 +97,6 @@ HaxeContext.prototype = {
 				if(data.isHaxeServer) {
 					_g.configuration.haxeServerPort = port;
 					_g.client.port = port;
-					Vscode.window.showInformationMessage("Using " + (_g.client.isPatchAvailable?"--patch":"non-patching") + " completion server at " + _g.configuration.haxeServerHost + " on port " + port);
 					resolve(port);
 					return;
 				}
@@ -106,7 +105,7 @@ HaxeContext.prototype = {
 					_g.client.patchAvailable(onData1);
 				} else {
 					if(_g.haxeProcess != null) _g.haxeProcess.kill("SIGKILL");
-					_g.haxeProcess = js_node_ChildProcess.spawn(_g.configuration.haxeExec,["--wait","" + port]);
+					_g.haxeProcess = js_node_ChildProcess.spawn(haxe_HaxeConfiguration.findHaxeExec(_g.configuration,_g.projectDir,platform_Platform.instance),["--wait","" + port]);
 					if(_g.haxeProcess.pid > 0) _g.client.patchAvailable(onData1);
 					_g.haxeProcess.on("error",function(err) {
 						_g.haxeProcess = null;
@@ -1218,6 +1217,19 @@ haxe_HaxeConfiguration.update = function(conf,platform) {
 	conf.haxelibPath = tmp;
 	return conf;
 };
+haxe_HaxeConfiguration.findHaxeExec = function(conf,projectDir,platform) {
+	var localPath = js_node_Path.join(projectDir,"Kha","Tools","Haxe");
+	try {
+		if(js_node_Fs.statSync(localPath).isDirectory()) {
+			var exec = "haxe" + platform.executableExtension;
+			var tmp = haxe_HaxeConfiguration.addTrailingSep(localPath,platform);
+			return tmp + exec;
+		}
+	} catch( error ) {
+		if (error instanceof js__$Boot_HaxeError) error = error.val;
+	}
+	return conf.haxeExec;
+};
 var haxe_HaxePatcherCmd = function(fileName) {
 	this.fileName = fileName;
 	this.actions = [];
@@ -1760,6 +1772,8 @@ js_html_compat_Uint8Array._subarray = function(start,end) {
 	return a;
 };
 var js_node_ChildProcess = require("child_process");
+var js_node_Fs = require("fs");
+var js_node_Path = require("path");
 var js_node_buffer_Buffer = require("buffer").Buffer;
 var js_node_net_Socket = require("net").Socket;
 var platform_Platform = function() {

@@ -1,5 +1,7 @@
 package haxe;
 
+import js.node.Fs;
+import js.node.Path;
 import platform.Platform;
 
 typedef HaxeConfigurationObject = {
@@ -28,5 +30,19 @@ class HaxeConfiguration {
         tmp = addTrailingSep(conf.haxelibPath, platform);
         conf.haxelibPath = tmp;
         return conf;
+    }
+    public static function findHaxeExec(conf:HaxeConfigurationObject, projectDir:String, platform:Platform):String {
+        var localPath = Path.join(projectDir, "Kha", "Tools", "Haxe");
+        try {
+            if (Fs.statSync(localPath).isDirectory()) {
+                var exec = "haxe" + platform.executableExtension;
+                var tmp = addTrailingSep(localPath, platform);
+                return tmp + exec;
+            }
+        }
+        catch (error: Dynamic) {
+
+        }
+        return conf.haxeExec;
     }
 }

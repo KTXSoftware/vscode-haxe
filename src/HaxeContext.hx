@@ -128,7 +128,7 @@ class HaxeContext  {
                     configuration.haxeServerPort = port;
                     client.port = port;
 
-                    'Using ${ client.isPatchAvailable ? "--patch" : "non-patching" } completion server at ${configuration.haxeServerHost} on port $port'.displayAsInfo();
+                    //'Using ${ client.isPatchAvailable ? "--patch" : "non-patching" } completion server at ${configuration.haxeServerHost} on port $port'.displayAsInfo();
 
                     return resolve(port);
                 }
@@ -137,7 +137,7 @@ class HaxeContext  {
                     client.patchAvailable(onData);
                 } else {
                     if (haxeProcess!=null) haxeProcess.kill("SIGKILL");
-                    haxeProcess = ChildProcess.spawn(configuration.haxeExec, ["--wait", '$port']);
+                    haxeProcess = ChildProcess.spawn(configuration.findHaxeExec(projectDir, platform.Platform.instance), ["--wait", '$port']);
                     if (haxeProcess.pid > 0)  {
                         client.patchAvailable(onData);
                     }
