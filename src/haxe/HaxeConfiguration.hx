@@ -35,7 +35,7 @@ class HaxeConfiguration {
         var localPath = Path.join(projectDir, "Kha", "Tools", "Haxe");
         try {
             if (Fs.statSync(localPath).isDirectory()) {
-                var exec = "haxe" + platform.executableExtension;
+                var exec = "haxe" + platform.executableExtensionK;
                 var tmp = addTrailingSep(localPath, platform);
                 return tmp + exec;
             }

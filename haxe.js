@@ -30,7 +30,7 @@ var HaxeContext = function(context) {
 	this.context = context;
 	this.haxeProcess = null;
 	this.configuration = Vscode.workspace.getConfiguration("haxe");
-	platform_Platform.init(process.platform);
+	platform_Platform.init(process.platform,process.arch);
 	haxe_HaxeConfiguration.update(this.configuration,platform_Platform.instance);
 	this.diagnostics = Vscode.languages.createDiagnosticCollection("haxe");
 	context.subscriptions.push(this.diagnostics);
@@ -1221,7 +1221,7 @@ haxe_HaxeConfiguration.findHaxeExec = function(conf,projectDir,platform) {
 	var localPath = js_node_Path.join(projectDir,"Kha","Tools","Haxe");
 	try {
 		if(js_node_Fs.statSync(localPath).isDirectory()) {
-			var exec = "haxe" + platform.executableExtension;
+			var exec = "haxe" + platform.executableExtensionK;
 			var tmp = haxe_HaxeConfiguration.addTrailingSep(localPath,platform);
 			return tmp + exec;
 		}
@@ -1779,16 +1779,20 @@ var js_node_net_Socket = require("net").Socket;
 var platform_Platform = function() {
 };
 platform_Platform.__name__ = true;
-platform_Platform.init = function(platformName) {
+platform_Platform.init = function(platformName,archName) {
 	if(platform_Platform.instance == null) platform_Platform.instance = new platform_Platform();
 	if(platformName == "win32") {
 		platform_Platform.instance.pathSeparator = "\\";
 		platform_Platform.instance.reversePathSeparator = "/";
 		platform_Platform.instance.executableExtension = ".exe";
+		platform_Platform.instance.executableExtensionK = ".exe";
 	} else {
 		platform_Platform.instance.pathSeparator = "/";
 		platform_Platform.instance.reversePathSeparator = "\\";
 		platform_Platform.instance.executableExtension = "";
+		if(platformName == "linux") {
+			if(archName == "x64") platform_Platform.instance.executableExtensionK = "-linux64"; else platform_Platform.instance.executableExtensionK = "-linux32";
+		} else platform_Platform.instance.executableExtensionK = "-osx";
 	}
 	return platform_Platform.instance;
 };
