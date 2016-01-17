@@ -62,7 +62,7 @@
                 },
                 "haxe.haxeDefaultBuildFile": {
                 "type": "string",
-                "default": "build.hxml",
+                "default": "project-debug-html5.hxml",
                 "description": "Name of your default build hxml file"
                 },
                 "haxe.haxeServerHost": {

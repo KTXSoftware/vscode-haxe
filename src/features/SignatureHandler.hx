@@ -13,6 +13,8 @@ import haxe.HaxeClient;
 import haxe.HaxeClient.MessageSeverity;
 import haxe.HaxeClient.Info as HxInfo;
 
+import js.node.Path;
+
 using features.SignatureHandler.FunctionDecoder;
 
 class FunctionDecoder {
@@ -48,7 +50,7 @@ class FunctionDecoder {
                     } else {
                         consLevel--;
                     }
-               
+
             }
             pc = c;
             i++;
@@ -65,38 +67,38 @@ class SignatureHandler implements SignatureHelpProvider
   public function new(hxContext:HaxeContext):Void
   {
       this.hxContext = hxContext;
-      
+
       var context = hxContext.context;
-            
+
       var disposable = Vscode.languages.registerSignatureHelpProvider(HaxeContext.languageID(), this, '(', ',');
       context.subscriptions.push(disposable);
   }
-  
+
   static var reType = ~/<type(\s+opar='(\d+)')?(\s+index='(\d+)')?>/;
   static var reGT = ~/&gt;/g;
   static var reLT = ~/&lt;/g;
-  
+
   public function provideSignatureHelp(document:TextDocument,
                                     position:Position,
                                     cancelToken:CancellationToken):Thenable<SignatureHelp>
   {
       var client = hxContext.client;
       var changeDebouncer = hxContext.changeDebouncer;
-      
+
       var path:String = document.uri.fsPath;
-      
+
       var text = document.getText();
-      var char_pos = document.offsetAt(position);          
+      var char_pos = document.offsetAt(position);
       var text = document.getText();
       var byte_pos = Tool.byte_pos(text, char_pos);
 
-      var displayMode = haxe.HaxeCmdLine.DisplayMode.Default; 
+      var displayMode = haxe.HaxeCmdLine.DisplayMode.Default;
 
       return new Thenable<SignatureHelp>(function(resolve) {
           var trying = 1;
           function make_request() {
             var cl = client.cmdLine.save()
-            .cwd(hxContext.projectDir)
+            .cwd(Path.join(hxContext.projectDir, "build"))
             .hxml(hxContext.configuration.haxeDefaultBuildFile)
             .noOutput()
             .display(path, byte_pos, displayMode)
@@ -110,7 +112,7 @@ class SignatureHandler implements SignatureHelpProvider
                         } else {
                             trying--;
                             hxContext.launchServer().then(function(port){
-                                make_request(); 
+                                make_request();
                             });
                         }
                     } else {
@@ -131,7 +133,7 @@ class SignatureHandler implements SignatureHelpProvider
                                 if (index >= 0) sh.activeParameter = index;
                                 datas.shift();
                                 datas.pop();
-                                datas.pop();                           
+                                datas.pop();
                                 for (data in datas) {
                                 data = reGT.replace(data, ">");
                                 data = reLT.replace(data, "<");
@@ -140,10 +142,10 @@ class SignatureHandler implements SignatureHelpProvider
                                 var si = new SignatureInformation(data);
                                 sigs.push(si);
                                 var pis = args.map(function (v){
-                                    return new ParameterInformation(v.name, v.type);         
+                                    return new ParameterInformation(v.name, v.type);
                                 });
                                 si.parameters = pis;
-                            } 
+                            }
                             }
                             resolve(sh);
                         }
@@ -152,7 +154,7 @@ class SignatureHandler implements SignatureHelpProvider
                 true
             );
           }
-          
+
           var isDirty = document.isDirty;
 
       function doRequest() {
@@ -179,9 +181,9 @@ class SignatureHandler implements SignatureHelpProvider
             } else {
                 make_request();
             }
-        }          
+        }
       }
-      
+
       if (!client.isServerAvailable) {
           var cl = client.cmdLine.save().version();
           var patcher = cl.beginPatch(path);
@@ -195,7 +197,7 @@ class SignatureHandler implements SignatureHelpProvider
           } else {
               patcher.remove();
           }
-                    
+
           client.sendAll(
             function (s:Socket, message, err) {
                 var isPatchAvailable = false;
@@ -208,7 +210,7 @@ class SignatureHandler implements SignatureHelpProvider
                 client.isPatchAvailable=isPatchAvailable;
                 doRequest();
             },
-            true             
+            true
           );
       } else doRequest();
     });

@@ -13,6 +13,8 @@ import haxe.HaxeClient;
 import haxe.HaxeClient.MessageSeverity;
 import haxe.HaxeClient.Info as HxInfo;
 
+import js.node.Path;
+
 class DefinitionHandler implements DefinitionProvider
 {
   var hxContext:HaxeContext;
@@ -50,7 +52,7 @@ class DefinitionHandler implements DefinitionProvider
           var trying = 1;
           function make_request() {
             var cl = client.cmdLine.save()
-            .cwd(hxContext.projectDir)
+            .cwd(Path.join(hxContext.projectDir, "build"))
             .hxml(hxContext.configuration.haxeDefaultBuildFile)
             .noOutput()
             .display(path, byte_pos, displayMode)
@@ -81,7 +83,7 @@ class DefinitionHandler implements DefinitionProvider
                            if ((datas.length==0) && (step == 0)) {
                                step ++;
                                cl
-                               .cwd(hxContext.projectDir)
+                               .cwd(Path.join(hxContext.projectDir, "build"))
                                .hxml(hxContext.configuration.haxeDefaultBuildFile)
                                .noOutput()
                                .display(path, byte_pos, haxe.HaxeCmdLine.DisplayMode.Resolve(document.getText(range)))

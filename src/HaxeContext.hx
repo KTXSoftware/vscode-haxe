@@ -19,6 +19,7 @@ import haxe.HaxePatcherCmd.PatcherUnit;
 
 import js.Promise;
 import js.node.ChildProcess;
+import js.node.Path;
 
 import haxe.Timer;
 
@@ -249,7 +250,7 @@ class HaxeContext  {
     }
     function diagnose(trying) {
         var cl = client.cmdLine.save()
-        .cwd(projectDir)
+        .cwd(Path.join(projectDir, "build"))
         .hxml(configuration.haxeDefaultBuildFile)
         .noOutput()
         ;

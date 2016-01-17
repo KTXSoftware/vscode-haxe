@@ -232,7 +232,7 @@ HaxeContext.prototype = {
 	}
 	,diagnose: function(trying) {
 		var _g = this;
-		var cl = this.client.cmdLine.save().cwd(this.projectDir).hxml(this.configuration.haxeDefaultBuildFile).noOutput();
+		var cl = this.client.cmdLine.save().cwd(js_node_Path.join(this.projectDir,"build")).hxml(this.configuration.haxeDefaultBuildFile).noOutput();
 		this.client.sendAll(function(s,message,err) {
 			if(err != null) {
 				if(trying <= 0) Vscode.window.showErrorMessage(err.message); else _g.launchServer().then(function(port) {
@@ -600,7 +600,7 @@ features_CompletionHandler.prototype = {
 			var make_request;
 			var make_request1 = null;
 			make_request1 = function() {
-				var cl = client.cmdLine.save().cwd(_g.hxContext.projectDir).define("display-details").hxml(_g.hxContext.configuration.haxeDefaultBuildFile).noOutput().display(path,byte_pos,displayMode);
+				var cl = client.cmdLine.save().cwd(js_node_Path.join(_g.hxContext.projectDir,"build")).define("display-details").hxml(_g.hxContext.configuration.haxeDefaultBuildFile).noOutput().display(path,byte_pos,displayMode);
 				client.sendAll(function(s,message,err) {
 					if(err != null) {
 						if(trying <= 0) {
@@ -677,7 +677,7 @@ features_DefinitionHandler.prototype = {
 			var make_request;
 			var make_request1 = null;
 			make_request1 = function() {
-				var cl = client.cmdLine.save().cwd(_g.hxContext.projectDir).hxml(_g.hxContext.configuration.haxeDefaultBuildFile).noOutput().display(path,byte_pos,displayMode);
+				var cl = client.cmdLine.save().cwd(js_node_Path.join(_g.hxContext.projectDir,"build")).hxml(_g.hxContext.configuration.haxeDefaultBuildFile).noOutput().display(path,byte_pos,displayMode);
 				var step = 1;
 				var parse;
 				var parse1 = null;
@@ -703,7 +703,7 @@ features_DefinitionHandler.prototype = {
 							datas.pop();
 							if(datas.length == 0 && step == 0) {
 								step++;
-								cl.cwd(_g.hxContext.projectDir).hxml(_g.hxContext.configuration.haxeDefaultBuildFile).noOutput().display(path,byte_pos,haxe_DisplayMode.Resolve(document.getText(range)));
+								cl.cwd(js_node_Path.join(_g.hxContext.projectDir,"build")).hxml(_g.hxContext.configuration.haxeDefaultBuildFile).noOutput().display(path,byte_pos,haxe_DisplayMode.Resolve(document.getText(range)));
 								client.sendAll(parse1);
 							} else {
 								var _g1 = 0;
@@ -828,7 +828,7 @@ features_SignatureHandler.prototype = {
 			var make_request;
 			var make_request1 = null;
 			make_request1 = function() {
-				var cl = client.cmdLine.save().cwd(_g.hxContext.projectDir).hxml(_g.hxContext.configuration.haxeDefaultBuildFile).noOutput().display(path,byte_pos,displayMode);
+				var cl = client.cmdLine.save().cwd(js_node_Path.join(_g.hxContext.projectDir,"build")).hxml(_g.hxContext.configuration.haxeDefaultBuildFile).noOutput().display(path,byte_pos,displayMode);
 				client.sendAll(function(s,message,err) {
 					if(err != null) {
 						if(trying <= 0) {

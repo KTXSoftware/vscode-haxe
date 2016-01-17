@@ -13,6 +13,7 @@ import haxe.HaxeClient;
 import haxe.HaxeClient.MessageSeverity;
 import haxe.HaxeCmdLine.IdeFlag;
 
+import js.node.Path;
 
 class CompletionHandler implements CompletionItemProvider
 {
@@ -135,7 +136,7 @@ class CompletionHandler implements CompletionItemProvider
 
       function make_request() {
           var cl = client.cmdLine.save()
-          .cwd(hxContext.projectDir)
+          .cwd(Path.join(hxContext.projectDir, "build"))
           .define("display-details")
           .hxml(hxContext.configuration.haxeDefaultBuildFile)
           .noOutput()
