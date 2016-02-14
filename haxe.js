@@ -1227,6 +1227,16 @@ haxe_HaxeConfiguration.findHaxeExec = function(conf,projectDir,platform) {
 		}
 	} catch( error ) {
 		if (error instanceof js__$Boot_HaxeError) error = error.val;
+		var globalPath = js_node_Path.join(Vscode.extensions.getExtension("ktx.kha").extensionPath,"Kha","Tools","Haxe");
+		try {
+			if(js_node_Fs.statSync(localPath).isDirectory()) {
+				var exec1 = "haxe" + platform.executableExtensionK;
+				var tmp1 = haxe_HaxeConfiguration.addTrailingSep(localPath,platform);
+				return tmp1 + exec1;
+			}
+		} catch( error1 ) {
+			if (error1 instanceof js__$Boot_HaxeError) error1 = error1.val;
+		}
 	}
 	return conf.haxeExec;
 };
