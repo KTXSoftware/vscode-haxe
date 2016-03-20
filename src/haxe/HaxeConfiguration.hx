@@ -42,7 +42,7 @@ class HaxeConfiguration {
             }
         }
         catch (error: Dynamic) {
-            var globalPath = Path.join(Vscode.extensions.getExtension("ktx.kha").extensionPath, "Kha", "Tools", "Haxe");
+            var globalPath = Path.join(findKha(), "Tools", "Haxe");
             try {
                 if (Fs.statSync(localPath).isDirectory()) {
                     var exec = "haxe" + platform.executableExtensionK;
@@ -56,4 +56,10 @@ class HaxeConfiguration {
         }
         return conf.haxeExec;
     }
+	private static function findKha():String {
+		var config:Dynamic = Vscode.workspace.getConfiguration('kha');
+		var khapath:String = config.khaPath;
+		if (khapath.length > 0) return khapath;
+		return Path.join(Vscode.extensions.getExtension('ktx.kha').extensionPath, 'Kha');
+	}
 }
