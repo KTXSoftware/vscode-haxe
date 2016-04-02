@@ -215,7 +215,7 @@ class HaxeContext  {
         haxeProcess = null;
 
         configuration = cast Vscode.workspace.getConfiguration(languageID());
-        platform.Platform.init(js.Node.process.platform);
+        platform.Platform.init(js.Node.process.platform, js.Node.process.arch);
         configuration.update(platform.Platform.instance);
 
         initBuildFile();
