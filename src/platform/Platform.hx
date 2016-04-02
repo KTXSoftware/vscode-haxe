@@ -7,8 +7,9 @@ class Platform {
     public var reversePathSeparator:String;
     public var executableExtension:String;
     public var executableExtensionK:String;
+    public var isWin:Bool;
 
-    function new() {    
+    function new() {
     }
 
     public static function init(platformName:String, archName:String) {
@@ -18,10 +19,12 @@ class Platform {
             instance.reversePathSeparator = "/";
             instance.executableExtension = ".exe";
             instance.executableExtensionK = ".exe";
+            instance.isWin = true;
         } else {
             instance.pathSeparator = "/";
             instance.reversePathSeparator = "\\";
-            instance.executableExtension = "";            
+            instance.executableExtension = "";
+            instance.isWin = false;
             if (platformName=="linux") {
                 if (archName=="x64") {
                     instance.executableExtensionK = "-linux64";

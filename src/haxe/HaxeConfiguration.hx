@@ -11,12 +11,17 @@ typedef HaxeConfigurationObject = {
     haxeDefaultBuildFile:String,
     haxeServerHost:String,
     haxeServerPort:Int,
+    haxeDiagnoseOnSave:Bool,
     haxeDiagnosticDelay:Int,
+    haxeCacheHaxelib:Bool,
+    haxeVSCodeBuildFile:String,
+    haxeTmpDirectory:String,
+    haxeUseTmpAsWorkingDirectory:Bool,
     ?haxeExec:String, // filled at runtime
     ?haxelibExec:String // filled at runtime
 };
 
-class HaxeConfiguration {    
+class HaxeConfiguration {
     public static function addTrailingSep(path:String, platform:Platform) {
         if (path=="") return path;
         path = path.split(platform.reversePathSeparator).join(platform.pathSeparator);
@@ -30,6 +35,7 @@ class HaxeConfiguration {
         conf.haxeExec = tmp + exec;
         tmp = addTrailingSep(conf.haxelibPath, platform);
         conf.haxelibPath = tmp;
+        conf.haxelibExec = tmp + "haxelib" + platform.executableExtension;
         return conf;
     }
     public static function findHaxeExec(conf:HaxeConfigurationObject, projectDir:String, platform:Platform):String {
