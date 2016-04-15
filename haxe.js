@@ -99,7 +99,7 @@ var HaxeContext = function(context) {
 	this.classPathsReverse = [];
 	this.useInternalBuildFile = false;
 	this.useTmpDir = false;
-	this.projectDir = Vscode.workspace.rootPath;
+	this.projectDir = js_node_Path.join(Vscode.workspace.rootPath,"build");
 	this.tmpToRealMap = new haxe_ds_StringMap();
 	this.insensitiveToSensitiveMap = new haxe_ds_StringMap();
 	this.initTmpDir();
@@ -972,7 +972,7 @@ HaxeContext.prototype = {
 	,diagnose: function(retry) {
 		var _g = this;
 		this.diagnosticStart = new Date().getTime();
-		var cl = this.client.cmdLine.save().cwd(js_node_Path.join(this.projectDir,"build")).hxml(this.get_buildFile()).noOutput();
+		var cl = this.client.cmdLine.save().cwd(this.get_workingDir()).hxml(this.get_buildFile()).noOutput();
 		if(this.lastDSEdited != null && this.lastDSEdited.lastSave > this.lastDiagnostic) {
 			var tmp = this.getPackageFromDS(this.lastDSEdited);
 			if(tmp != null) {
@@ -1801,7 +1801,7 @@ features_CompletionHandler.prototype = {
 					reject([]);
 					return;
 				}
-				var cl = client.cmdLine.save().cwd(js_node_Path.join(_g.hxContext.projectDir,"build")).define("display-details").hxml(_g.hxContext.get_buildFile()).noOutput();
+				var cl = client.cmdLine.save().cwd(_g.hxContext.get_workingDir()).define("display-details").hxml(_g.hxContext.get_buildFile()).noOutput();
 				if(displayClasses) {
 					cl.classes();
 				} else {
@@ -1920,7 +1920,7 @@ features_DefinitionHandler.prototype = {
 			}
 			var trying = 1;
 			var make_request = function() {
-				var cl = client.cmdLine.save().cwd(js_node_Path.join(_g.hxContext.projectDir,"build")).hxml(_g.hxContext.get_buildFile()).noOutput().display(path,byte_pos,displayMode);
+				var cl = client.cmdLine.save().cwd(_g.hxContext.get_workingDir()).hxml(_g.hxContext.get_buildFile()).noOutput().display(path,byte_pos,displayMode);
 				var parse = function(m) {
 					if(cancelToken.isCancellationRequested) {
 						reject(null);
@@ -2199,7 +2199,7 @@ features_SignatureHandler.prototype = {
 			}
 			var make_request = null;
 			make_request = function() {
-				var cl = client.cmdLine.save().cwd(js_node_Path.join(_g.hxContext.projectDir,"build")).hxml(_g.hxContext.get_buildFile()).noOutput().display(path,byte_pos,displayMode);
+				var cl = client.cmdLine.save().cwd(_g.hxContext.get_workingDir()).hxml(_g.hxContext.get_buildFile()).noOutput().display(path,byte_pos,displayMode);
 				client.setContext({ fileName : path, line : position.line + 1, column : char_pos}).setCancelToken(cancelToken);
 				_g.hxContext.send(null,true,1).then(function(m) {
 					_g.hxContext.diagnostics.clear();

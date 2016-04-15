@@ -60,7 +60,7 @@ class DefinitionHandler implements DefinitionProvider
           var trying = 1;
           function make_request() {
             var cl = client.cmdLine.save()
-                .cwd(Path.join(hxContext.projectDir, "build"))
+                .cwd(hxContext.workingDir)
                 .hxml(hxContext.buildFile)
                 .noOutput()
                 .display(path, byte_pos, displayMode)
@@ -80,7 +80,7 @@ class DefinitionHandler implements DefinitionProvider
                     if ((datas.length==0) && (step == 0)) {
                         step ++;
                         cl
-                        .cwd(Path.join(hxContext.projectDir, "build"))
+                        .cwd(hxContext.projectDir)
                         .hxml(hxContext.configuration.haxeDefaultBuildFile)
                         .noOutput()
                         .display(path, byte_pos, haxe.HaxeCmdLine.DisplayMode.accept(document.getText(range)))

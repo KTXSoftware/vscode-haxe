@@ -227,7 +227,7 @@ class HaxeContext  {
 
         useInternalBuildFile = false;
         useTmpDir = false;
-        projectDir = Vscode.workspace.rootPath;
+        projectDir = Path.join(Vscode.workspace.rootPath, "build");
         tmpToRealMap = new Map();
         insensitiveToSensitiveMap = new Map();
 
@@ -770,7 +770,7 @@ class VSCTool {
         diagnosticStarted();
 
         var cl = client.cmdLine.save()
-        .cwd(Path.join(projectDir, "build"))
+        .cwd(workingDir)
         .hxml(buildFile)
         .noOutput()
         ;
@@ -870,7 +870,7 @@ class VSCTool {
         var editor = Vscode.window.activeTextEditor;
 
         var cl = client.cmdLine.save()
-            .cwd(Path.join(projectDir, "build"))
+            .cwd(workingDir)
             // patch should only patch no validate document
             // so disable args that can trigger the validation
             //.hxml(hxContext.configuration.haxeDefaultBuildFile)

@@ -92,7 +92,7 @@
 								},
 								"haxe.haxeDefaultBuildFile": {
 								"type": "string",
-								"default": "build/project-debug-html5.hxml",
+								"default": "project-debug-html5.hxml",
 								"description": "Name of your default build hxml file"
 								},
 								"haxe.haxeServerHost": {
@@ -132,7 +132,7 @@
 								},
 								"haxe.haxeUseTmpAsWorkingDirectory": {
 								"type": "boolean",
-								"default": true,
+								"default": false,
 								"description": "If set and a tmp directory also specified, the tmp directory will be used as the working directory"
 								}
 						}

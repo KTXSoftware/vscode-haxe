@@ -14,7 +14,6 @@ import haxe.HaxeClient;
 import haxe.HaxeClient.MessageSeverity;
 import haxe.HaxeClient.Info as HxInfo;
 
-import js.node.Path;
 using features.SignatureHandler.FunctionDecoder;
 
 import js.Promise as JSPromise;
@@ -181,7 +180,7 @@ class SignatureHandler implements SignatureHelpProvider
 
           function make_request() {
               var cl = client.cmdLine.save()
-              .cwd(Path.join(hxContext.projectDir, "build"))
+              .cwd(hxContext.workingDir)
               .hxml(hxContext.buildFile)
               .noOutput()
               .display(path, byte_pos, displayMode)
