@@ -12,9 +12,10 @@ Code Completion  | Peek Definition
 ------------- | -------------
 <img src="https://cloud.githubusercontent.com/assets/2192439/13637956/41882252-e5c7-11e5-947a-51e53a2eed46.gif" width=400> | <img src="https://cloud.githubusercontent.com/assets/2192439/13637971/542aa33a-e5c7-11e5-961d-d645e8f54df0.gif" width=400>
 
-Function Signature |
------------------- |
-<img src="https://cloud.githubusercontent.com/assets/2192439/13637928/180ff594-e5c7-11e5-831a-4a3653e53d54.gif" width=400> |
+Function Signature | Build Error Reporting
+------------------ | ------------------------
+<img src="https://cloud.githubusercontent.com/assets/2192439/13637928/180ff594-e5c7-11e5-831a-4a3653e53d54.gif" width=400> | <img src="https://cloud.githubusercontent.com/assets/2192439/14265893/681877fe-fa81-11e5-84e3-a897da115374.png" width=400>
+
 
 #Install the Extension
 
@@ -36,15 +37,21 @@ By default the extension looks for a `build.hxml` in the root of the project, bu
 }
 ```
 
-#Framework notes:
+#Build errors
+While the `vscode-haxe` extension doesn't "build and launch" projects out-of-the-box (it gets complicated with so many targets and frameworks), it does show a list of build errors thanks to the code completion compilation step. To see build errors, hit `CTRL-SHIFT-M` (or `CMD-SHIFT-M`), or click on the little warnings/errors icon in the lower-left corner of the VSCode window: ![image](https://cloud.githubusercontent.com/assets/2192439/14284678/b7c904b0-fb05-11e5-815c-b73f28dbc096.png)
+
+
+Note: My personal vision of `vscode-haxe` is to be a language helper, while you can add project launch / debug support per your chosen framework / target if you choose. E.g. see [vscode-hxcpp-debug](https://github.com/jcward/vscode-hxcpp-debug) for an example of an extension that provides hxcpp launch and debug capabilities. But feel free to file an issue to discuss ideas.
+
+#Framework notes
 Some frameworks support the creation of `.hxml` files, which is necessary to run the Haxe code completion engine. Below is a list of how you can get an `.hxml` file from various frameworks.
 
-Framework     | How to get .hxml                    | Example usage
-------------- | ------------------------------------|------------------------
-OpenFL        | `openfl display <platform>`         | `openfl display linux > build.hxml`
-Snow          | `haxelib run flow info --hxml`      | `haxelib run flow info --hxml > build.hxml`
-Kha           | See `build/project-<platform>.hxml` | Set location in Workspace Settings
-Flambe        | `flambe haxe-flags`                 | `flambe haxe-flags > build.hxml`
+Framework     | How to get .hxml                      | Example usage
+------------- | --------------------------------------|------------------------
+Lime / OpenFL | `haxelib run lime display <platform>` | `haxelib run lime display linux > build.hxml`
+Snow          | `haxelib run flow info --hxml`        | `haxelib run flow info --hxml > build.hxml`
+Kha           | See `build/project-<platform>.hxml`   | Set location in Workspace Settings
+Flambe        | `flambe haxe-flags`                   | `flambe haxe-flags > build.hxml`
 
 Feel free to file an issue with details for other frameworks.
 
@@ -53,7 +60,7 @@ Feel free to file an issue with details for other frameworks.
 ##Code completion status: BETA
 The code completion in this extension is currently in beta. There are bugs, limitations, and requirements that still need to be worked out. There's an effort to standardize Haxe IDE support over at [snowkit/Tides](https://github.com/snowkit/tides). When this is ready, we'll integrate it (no need to duplicate effort and provide divergent experiences.)
 
-##Current limitations:
+##Current limitations
 Some features may require a forthcoming version of the Haxe compiler.
 
 ##Troubleshooting the completion features
